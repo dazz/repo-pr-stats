@@ -1,0 +1,21 @@
+{
+    "name": "dazz/repo-pr-stats",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "dazz",
+            "email": "annejulia@gmail.com"
+        }
+    ],
+    "autoload": {
+      "psr0": {
+        "": "src/"
+      }
+    },
+    "require": {
+      "silex/silex": "2.0.*@dev",
+      "guzzlehttp/guzzle": "~4.0",
+      "symfony/twig-bridge": ">=2.4,<2.6-dev",
+      "twig/twig": ">=1.8.0,<2.0-dev"
+    }
+}

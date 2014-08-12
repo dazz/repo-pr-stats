@@ -1,0 +1,45 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Dashboard</h1>
+
+        <div class="row placeholders">
+
+        </div>
+
+        <h2 class="sub-header">Open Pull Requests</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Open Since</th>
+                    <th>Mergable</th>
+                    <th>Because</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% block pulls %}
+                    {% for pullRequest in pulls %}
+                        {% set pull = pullRequest.data %}
+                        <tr>
+                            <td><a href="{{ pull.html_url }}" title="{{ pull.body }}">
+                                    {{ pull.number }}</a>
+                            </td>
+                            <td><a href="{{ pull.html_url }}" title="{{ pull.body }}">
+                                    {{ pull.title }}</a>
+                            </td>
+                            <td>{{ pull.created_at|date("Y-m-d") }}</td>
+                            <td>{{ pull.mergeable ? 'yes' : 'no' }}</td>
+                            <td>{{ pull.mergeable_state }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endblock %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
