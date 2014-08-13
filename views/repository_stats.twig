@@ -1,0 +1,22 @@
+{#{{ dump(stats) }}#}
+
+<table class="table table-striped table-hover">
+    <tr>
+        <th></th>
+        {% for date, stat in stats %}
+            <th>{{ stat.date }} {{ stat.hour }}h</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>countPullRequests</td>
+        {% for date, stat in stats %}
+        <td>{{ stat.countPullRequests }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>agePullRequestst</td>
+        {% for date, stat in stats %}
+            <td>{{ stat.agePullRequests }}</td>
+        {% endfor %}
+    </tr>
+</table>
