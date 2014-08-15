@@ -17,8 +17,10 @@
                     <th>#</th>
                     <th>Title</th>
                     <th>Open Since</th>
+                    <th>Created By</th>
+                    <th>Assigned To</th>
                     <th>Mergable</th>
-                    <th>Because</th>
+                    <th>Merge State</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,6 +35,8 @@
                                     {{ pull.title }}</a>
                             </td>
                             <td>{{ pull.created_at|date("Y-m-d") }}</td>
+                            <td>{{ pull.user.login }}</td>
+                            <td>{{ pull.assignee ? pull.assignee.login : '' }}</td>
                             <td>{{ pull.mergeable ? 'yes' : 'no' }}</td>
                             <td>{{ pull.mergeable_state }}</td>
                         </tr>
