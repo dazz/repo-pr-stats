@@ -10,9 +10,11 @@ $app->register(new \Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => $app['rootDir'].'/views',
 ));
 
-$app['config.github.token'] = 'secret token';
+$app['config.github.token'] = '08b18b0e196f60220fcb665eaa98db0222f11ac3';
 $app['config.github.repositories'] = [
-    'doctrine/doctrine'
+    'easybib/scholar',
+    'easybib/www',
+    'easybib/easybib-api',
 ];
 
 $app['github.token'] = $app->factory(
@@ -96,16 +98,6 @@ $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
             $stat = [];
             $pullRequests = json_decode(file_get_contents($file->getRealpath()));
 
-            $stat['agePullRequests'] = 0;
-            foreach ($pullRequests as $pull) {
-                $data = $pull->data;
-                $days = (new \DateTime($data->created_at))->diff(new \DateTime('now'))->format('%a');
-                if ($days > $stat['agePullRequests']) {
-                    $stat['agePullRequests'] = $days;
-                }
-                
-            }
-
             $stat['countPullRequests'] = count($pullRequests);
 
             list($filename, $extension) = explode('.', $file->getRelativePathname());
@@ -116,6 +108,17 @@ $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
             $stat['hour'] = $hour;
 
             $key = sprintf('%s-%s', $date, $hour);
+
+            $stat['agePullRequests'] = 0;
+            foreach ($pullRequests as $pull) {
+                $data = $pull->data;
+                $days = (new \DateTime($data->created_at))->diff(new \DateTime($date))->format('%a');
+                if ($days > $stat['agePullRequests']) {
+                    $stat['agePullRequests'] = $days;
+                }
+                
+            }
+
             $stats[$key] = $stat;
         }
 
