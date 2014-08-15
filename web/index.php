@@ -91,7 +91,7 @@ $app->get('/repo/{repository}', function ($repository) use ($app) {
 $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
         $repoDir = sprintf('%s/%s', $app['cacheDir'], $repository);
         $finder = new \Symfony\Component\Finder\Finder();
-        $finder->files()->in($repoDir);
+        $finder->files()->in($repoDir)->sortByName();
         $stats = [];
         foreach ($finder as $file) {
             /** @var \SplFileInfo $file */
