@@ -10,13 +10,6 @@ $app->register(new \Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => $app['rootDir'].'/views',
 ));
 
-$app['config.github.token'] = '08b18b0e196f60220fcb665eaa98db0222f11ac3';
-$app['config.github.repositories'] = [
-    'easybib/scholar',
-    'easybib/www',
-    'easybib/easybib-api',
-];
-
 $app['github.token'] = $app->factory(
     function () use ($app) {
         if ($app->offsetExists('config.github.token') && !empty($app['config.github.token'])) {
@@ -66,21 +59,14 @@ $app->get('/repo/{repository}', function ($repository) use ($app) {
         $pulls = $app['readPrCache']($repository);
         if(empty($pulls)) {
 
-            $client = new GuzzleHttp\Client();
-            $repositoryUrl = sprintf('https://api.github.com/repos/%s/pulls', $app['github.repository']($repository));
-            $request = $client->createRequest('GET', $repositoryUrl);
-            $request->addHeader('Authorization', sprintf('token %s', $app['github.token']));
-            $res = $client->send($request);
-
-            $pulls = json_decode($res->getBody());
+            $pulls = $app['getPulls']($repository);
 
             foreach ($pulls as $key => $pr) {
-                $prRequest = $client->createRequest('GET', $pr->url);
-                $prRequest->addHeader('Authorization', sprintf('token %s', $app['github.token']));
-                $prResponse = $client->send($prRequest);
-
-                $pr = json_decode($prResponse->getBody());
-                $pulls[$key]->data = $pr;
+                $pulls[$key]->data = $app['getPullDetail']($pr->url);
+                $pulls[$key]->data_statuses = $app['getPullStatus']($pulls[$key]->data->statuses_url);
+                if (count($pulls[$key]->data_statuses) > 0) {
+                    $pulls[$key]->data_statuses_last = $pulls[$key]->data_statuses[0];
+                }
             }
 
             $app['writePrCache']($repository, $pulls);
@@ -116,7 +102,6 @@ $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
                 if ($days > $stat['agePullRequests']) {
                     $stat['agePullRequests'] = $days;
                 }
-                
             }
 
             $stats[$key] = $stat;
@@ -124,6 +109,39 @@ $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
 
         return $app['twig']->render('repository_stats.twig', ['stats' => $stats]);
 })->bind('repository_stats');
+
+$app['getPulls'] = $app->protect(
+    function ($repository) use ($app) {
+        $client = new GuzzleHttp\Client();
+        $repositoryUrl = sprintf('https://api.github.com/repos/%s/pulls', $app['github.repository']($repository));
+        $request = $client->createRequest('GET', $repositoryUrl);
+        $request->addHeader('Authorization', sprintf('token %s', $app['github.token']));
+        $res = $client->send($request);
+
+        return json_decode($res->getBody());
+    }
+);
+
+$app['getPullDetail'] = $app->protect(
+    function ($detailUrl) use ($app) {
+        $client = new GuzzleHttp\Client();
+        $request = $client->createRequest('GET', $detailUrl);
+        $request->addHeader('Authorization', sprintf('token %s', $app['github.token']));
+        $res = $client->send($request);
+
+        return json_decode($res->getBody());
+    }
+);
+$app['getPullStatus'] = $app->protect(
+    function ($statusesUrl) use ($app) {
+        $client = new GuzzleHttp\Client();
+        $request = $client->createRequest('GET', $statusesUrl);
+        $request->addHeader('Authorization', sprintf('token %s', $app['github.token']));
+        $res = $client->send($request);
+
+        return json_decode($res->getBody());
+    }
+);
 
 $app['cacheDir'] = sprintf('%s/prLog', $app['rootDir']);
 
@@ -160,5 +178,11 @@ $app['writePrCache'] = $app->protect(
         }
     }
 );
+
+$configFile = __DIR__ . '/config.php';
+if (file_exists($configFile) == false) {
+    throw new \Exception($configFile . ' does not exist!');
+}
+require_once __DIR__ . '/config.php';
 
 $app->run();
