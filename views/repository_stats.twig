@@ -14,9 +14,15 @@
         {% endfor %}
     </tr>
     <tr>
-        <td>agePullRequestst</td>
+        <td>max. age PR</td>
         {% for date, stat in stats %}
             <td>{{ stat.agePullRequests }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>weight</td>
+        {% for date, stat in stats %}
+            <td>{{ stat.weight }}</td>
         {% endfor %}
     </tr>
 </table>

@@ -67,6 +67,7 @@ $app->get('/repo/{repository}', function ($repository) use ($app) {
                 if (count($pulls[$key]->data_statuses) > 0) {
                     $pulls[$key]->data_statuses_last = $pulls[$key]->data_statuses[0];
                 }
+                $pulls[$key]->data_weight = $app['calculatePullWeight']($pr);
             }
 
             $app['writePrCache']($repository, $pulls);
@@ -96,12 +97,14 @@ $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
             $key = sprintf('%s-%s', $date, $hour);
 
             $stat['agePullRequests'] = 0;
+            $stat['weight'] = 0;
             foreach ($pullRequests as $pull) {
                 $data = $pull->data;
                 $days = (new \DateTime($data->created_at))->diff(new \DateTime($date))->format('%a');
                 if ($days > $stat['agePullRequests']) {
                     $stat['agePullRequests'] = $days;
                 }
+                $stat['weight'] += $app['calculatePullWeight']($pull, $date);
             }
 
             $stats[$key] = $stat;
@@ -176,6 +179,41 @@ $app['writePrCache'] = $app->protect(
         if (file_exists($filename) == false) {
             file_put_contents($filename, json_encode($pulls, JSON_PRETTY_PRINT));
         }
+    }
+);
+
+$app['calculatePullWeight'] = $app->protect(
+    function ($pull, $dateString) use ($app) {
+        $weight = 0;
+
+        $days = (new \DateTime($pull->data->created_at))->diff(new \DateTime($dateString))->format('%a');
+        $weight += $app['getMeasureWeights']['age'] * $days;
+
+        $mergeable = $pull->data->mergeable ? 'yes' : 'no';
+
+        $weight += $app['getMeasureWeights']['mergeable'][$mergeable];
+
+        $weight += $app['getMeasureWeights']['mergeable_state'][$pull->data->mergeable_state];
+
+        return $weight;
+    }
+);
+
+$app['getMeasureWeights'] = $app->factory(
+    function () {
+        return [
+            'age' => 10,
+            'mergeable' => [
+                'yes' => 0,
+                'no' => 10
+            ],
+            'mergeable_state' => [
+                'unknown' => 10,
+                'unstable' => 10,
+                'dirty' => 10,
+                'clean' => 0,
+            ],
+        ];
     }
 );
 
