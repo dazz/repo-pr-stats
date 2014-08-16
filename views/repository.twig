@@ -16,11 +16,12 @@
                 <tr>
                     <th>#</th>
                     <th>Title</th>
+                    <th>Weight</th>
                     <th>Open Since</th>
-                    <th>Created By</th>
-                    <th>Assigned To</th>
                     <th>Mergable</th>
                     <th>CI State</th>
+                    <th>Created By</th>
+                    <th>Assigned To</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,13 +36,14 @@
                             <td><a href="{{ pull.html_url }}" title="{{ pull.body }}">
                                     {{ pull.title }}</a>
                             </td>
+                            <td>{{ pullRequest.data_weight.sum }}</td>
                             <td>{{ pull.created_at|date("Y-m-d") }}</td>
-                            <td>{{ pull.user.login }}</td>
-                            <td>{{ pull.assignee ? pull.assignee.login : '' }}</td>
                             <td>{{ pull.mergeable ? 'yes' : 'no' }}</td>
                             <td><a href="{{ lastStatus.target_url }}" title="State of integration">
                                     {{ pull.mergeable_state }}</a>
                             </td>
+                            <td>{{ pull.user.login }}</td>
+                            <td>{{ pull.assignee ? pull.assignee.login : '' }}</td>
                         </tr>
                     {% endfor %}
                 {% endblock %}

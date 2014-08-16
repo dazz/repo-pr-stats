@@ -104,7 +104,8 @@ $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
                 if ($days > $stat['agePullRequests']) {
                     $stat['agePullRequests'] = $days;
                 }
-                $stat['weight'] += $app['calculatePullWeight']($pull, $date);
+                $weights = $app['calculatePullWeight']($pull, $date);
+                $stat['weight'] += $weights['sum'];
             }
 
             $stats[$key] = $stat;
@@ -183,19 +184,25 @@ $app['writePrCache'] = $app->protect(
 );
 
 $app['calculatePullWeight'] = $app->protect(
-    function ($pull, $dateString) use ($app) {
-        $weight = 0;
+    function ($pull, $dateString = 'now') use ($app) {
+        $weights = [];
 
-        $days = (new \DateTime($pull->data->created_at))->diff(new \DateTime($dateString))->format('%a');
-        $weight += $app['getMeasureWeights']['age'] * $days;
+        list($date, $time) = explode('T', $pull->data->created_at);
+        $days = (new \DateTime($date))->diff(new \DateTime($dateString))->format('%a');
+        $weights['age'] = $app['getMeasureWeights']['age'] * $days;
 
         $mergeable = $pull->data->mergeable ? 'yes' : 'no';
+        $weights['mergeable'] = $app['getMeasureWeights']['mergeable'][$mergeable];
 
-        $weight += $app['getMeasureWeights']['mergeable'][$mergeable];
+        $weights['mergeable_state'] = $app['getMeasureWeights']['mergeable_state'][$pull->data->mergeable_state];
 
-        $weight += $app['getMeasureWeights']['mergeable_state'][$pull->data->mergeable_state];
+        $weights['assignee'] = empty($pull->assignee->login) ? $app['getMeasureWeights']['assignee']['no'] : $app['getMeasureWeights']['assignee']['yes'];
+        $weights['body'] = empty($pull->body) ? $app['getMeasureWeights']['body']['no'] : $app['getMeasureWeights']['body']['yes'];
 
-        return $weight;
+        $weights['sum'] = array_sum($weights);
+//var_dump($weights);
+//        var_dump($pull);die();
+        return $weights;
     }
 );
 
@@ -208,10 +215,18 @@ $app['getMeasureWeights'] = $app->factory(
                 'no' => 10
             ],
             'mergeable_state' => [
-                'unknown' => 10,
-                'unstable' => 10,
-                'dirty' => 10,
+                'unknown' => 20,
+                'unstable' => 10, // mergeable, but  fails
+                'dirty' => 10,    // unmergeable
                 'clean' => 0,
+            ],
+            'assignee' => [
+                'yes' => 0,
+                'no' => 10
+            ],
+            'body' => [
+                'yes' => 0,
+                'no' => 10
             ],
         ];
     }
