@@ -18,6 +18,7 @@
                     <th>Title</th>
                     <th>Weight</th>
                     <th>Open Since</th>
+                    <th>Updated At</th>
                     <th>Mergable</th>
                     <th>CI State</th>
                     <th>Created By</th>
@@ -38,6 +39,7 @@
                             </td>
                             <td>{{ pullRequest.data_weight.sum }}</td>
                             <td>{{ pull.created_at|date("Y-m-d") }}</td>
+                            <td>{{ pull.updated_at|date("Y-m-d") }}</td>
                             <td>{{ pull.mergeable ? 'yes' : 'no' }}</td>
                             <td><a href="{{ lastStatus.target_url }}" title="State of integration">
                                     {{ pull.mergeable_state }}</a>
