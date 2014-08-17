@@ -215,7 +215,6 @@ $app['getPrLogFile'] = $app->protect(
             json_decode($file->getContents()),
             $file->getFilename(),
         ];
-        die();
     }
 );
 
