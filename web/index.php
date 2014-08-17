@@ -56,6 +56,11 @@ $app->get('/sidebar', function () use ($app) {
 })->bind('sidebar');
 
 $app->get('/repo/{repository}', function ($repository) use ($app) {
+        list($pulls, $filename) = $app['getPrLogFile']($repository);
+        return $app['twig']->render('repository.twig', ['pulls' => $pulls, 'repository' => $repository, 'filename' => $filename]);
+})->bind('repository');
+
+$app->post('/repo/{repository}', function ($repository) use ($app) {
         $pulls = $app['readPrCache']($repository);
         if(empty($pulls)) {
 
@@ -72,8 +77,9 @@ $app->get('/repo/{repository}', function ($repository) use ($app) {
 
             $app['writePrCache']($repository, $pulls);
         }
-        return $app['twig']->render('repository.twig', ['pulls' => $pulls, 'repository' => $repository]);
-})->bind('repository');
+        return $app->redirect($app['url_generator']->generate('repository', ['repository' => $repository]));
+    })->bind('repository_createDump');
+
 
 $app->get('/repo/{repository}/stats', function ($repository) use ($app) {
         $repoDir = sprintf('%s/%s', $app['cacheDir'], $repository);
@@ -180,6 +186,36 @@ $app['writePrCache'] = $app->protect(
         if (file_exists($filename) == false) {
             file_put_contents($filename, json_encode($pulls, JSON_PRETTY_PRINT));
         }
+    }
+);
+
+$app['getPrLogFile'] = $app->protect(
+    function ($repository, $filename = false) use ($app) {
+
+        $repoDir = sprintf('%s/%s', $app['cacheDir'], $repository);
+        if ($filename) {
+            $fileRealPath = sprintf('%s/%s', $repoDir, $filename);
+            if (file_exists($fileRealPath) == false) {
+                throw new \Exception(sprintf('file %s does not exist', $filename));
+            }
+            return [
+                json_decode(file_get_contents($filename)),
+                $filename,
+            ];
+        }
+
+        $finder = \Symfony\Component\Finder\Finder::create()->files()->in($repoDir)->name('*.json')->sortByName();
+
+        foreach ($finder as $file) {
+//            var_dump($file->getFilename());
+            /** @var \SplFileInfo $file */
+//
+        }
+        return [
+            json_decode($file->getContents()),
+            $file->getFilename(),
+        ];
+        die();
     }
 );
 
