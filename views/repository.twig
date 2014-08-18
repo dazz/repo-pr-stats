@@ -2,11 +2,14 @@
 
 {% block content %}
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">Dashboard</h1>
+        <h1 class="page-header">{{ repository }} {{ record.name }}</h1>
 
+        <form action="{{ url('repository_createDump', {'repositorySlug': repository}) }}" method="post">
+            <button value="create">Create Dump</button>
+        </form>
         <h2 class="sub-header">Stats</h2>
         <div class="row placeholders">
-            {{ render(url('repository_stats', {'repository':repository})) }}
+            {{ render(url('repository_stats', {'repositorySlug': repository})) }}
         </div>
 
         <h2 class="sub-header">Open Pull Requests</h2>
@@ -27,9 +30,9 @@
                 </thead>
                 <tbody>
                 {% block pulls %}
-                    {% for pullRequest in pulls %}
+                    {% for pullRequest in record.pullRequests %}
                         {% set pull = pullRequest.data %}
-                        {% set lastStatus = pullRequest.data_statuses_last ? pullRequest.data_statuses_last : {} %}
+                        {% set lastStatus = pullRequest.data_statuses_last is defined ? pullRequest.data_statuses_last : {'target_url':''} %}
                         <tr>
                             <td><a href="{{ pull.html_url }}" title="{{ pull.body }}">
                                     {{ pull.number }}</a>
@@ -37,7 +40,7 @@
                             <td><a href="{{ pull.html_url }}" title="{{ pull.body }}">
                                     {{ pull.title }}</a>
                             </td>
-                            <td>{{ pullRequest.data_weight.sum }}</td>
+                            <td>{{ pullRequest.data_stats is defined ? pullRequest.data_stats.sum : 0}}</td>
                             <td>{{ pull.created_at|date("Y-m-d") }}</td>
                             <td>{{ pull.updated_at|date("Y-m-d") }}</td>
                             <td>{{ pull.mergeable ? 'yes' : 'no' }}</td>

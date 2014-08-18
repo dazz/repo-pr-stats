@@ -8,8 +8,8 @@
         }
     ],
     "autoload": {
-      "psr0": {
-        "": "src/"
+      "psr-4": {
+        "Dazz\\PrStats\\": "src/"
       }
     },
     "require": {
