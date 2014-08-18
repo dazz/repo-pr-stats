@@ -24,8 +24,7 @@ $app->get('/sidebar', function () use ($app) {
 })->bind('sidebar');
 
 $app->get('/repo/{repositorySlug}', function ($repositorySlug) use ($app) {
-//        $record = $app['storage']->getLastRecord($repositorySlug);
-        $record = $app['storage']->getRecord($repositorySlug, '2014-08-19_00');
+        $record = $app['storage']->getLastRecord($repositorySlug);
         $recordStats = $app['stats']->getRecordStats($record);
 
         return $app['twig']->render(
