@@ -9,6 +9,7 @@
  */
 namespace Dazz\PrStats\Service;
 
+use Dazz\PrStats\Service\Exception\NoRecordCreatedException;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -50,9 +51,14 @@ class Storage
      */
     public function getAllRecords($repositorySlug)
     {
+        $directory = $this->getRepositoryDirectory($repositorySlug);
+        if (!is_dir($directory)) {
+            throw new NoRecordCreatedException($repositorySlug);
+        }
+        
         return Finder::create()
             ->files()
-            ->in($this->getRepositoryDirectory($repositorySlug))
+            ->in($directory)
             ->name('*.json')
             ->sortByName()
         ;
