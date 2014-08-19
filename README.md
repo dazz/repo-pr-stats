@@ -12,6 +12,6 @@ The data will be stored in the configured `prLog/{repository}` directory and dis
 
 ### Config Requirements:
 
-* Copy `web/config.dist.php` to `web/config.php`
+* Copy `config/config.dist.php` to `config/config.php`
 * Add github token
 * Add repositories to get stats for

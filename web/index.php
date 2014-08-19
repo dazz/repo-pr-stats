@@ -66,10 +66,10 @@ $app->error(
     }
 );
 
-$configFile = __DIR__ . '/config.php';
+$configFile = $app['rootDir'] . '/config/config.php';
 if (file_exists($configFile) == false) {
     throw new \Exception($configFile . ' does not exist!');
 }
-require_once __DIR__ . '/config.php';
+require_once $app['rootDir'] . '/config/config.php';
 
 $app->run();
