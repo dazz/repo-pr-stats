@@ -47,27 +47,21 @@ class Stats
     public function getRecordStats(Record $record)
     {
         /** @var \SplFileInfo $file */
-        $stat = [];
+        $stat = $record->getMetaFromName();
 
-        $stat['countPullRequests'] = count($record->getPullRequests());
-
-        list($filename, $extension) = explode('.', $record->getName());
-        list($repo, $date, $hour) = explode('_', $filename);
-
-        $stat['filename'] = $record->getName();
-        $stat['date'] = $date;
-        $stat['hour'] = $hour;
-
+        $stat['countPullRequests'] = $record->getNumberOfPullRequests();
         $stat['agePullRequests'] = 0;
         $stat['sum'] = 0;
         $stat['weights'] = [];
+
         foreach ($record->getPullRequests() as $index => $pullRequest) {
-            $data = $pullRequest->data;
-            $days = (new \DateTime($data->created_at))->diff(new \DateTime($date))->format('%a');
+
+            $days = $record->getPullRequestAgeSince($index, $stat['date']);
             if ($days > $stat['agePullRequests']) {
                 $stat['agePullRequests'] = $days;
             }
-            $record->addPullRequestStats($index, $this->getPullRequestStats($pullRequest, $date));
+
+            $record->addPullRequestStats($index, $this->getPullRequestStats($pullRequest, $stat['date']));
             $stat['sum'] += $record->getPullRequestStats($index)['sum'];
         }
         return $stat;
