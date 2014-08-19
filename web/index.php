@@ -42,10 +42,14 @@ $app->post('/repo/{repositorySlug}', function ($repositorySlug) use ($app) {
         return $app->redirect($app['url_generator']->generate('repository', ['repositorySlug' => $repositorySlug]));
     })->bind('repository_createDump');
 
-$app->get('/repo/{repositorySlug}/stats', function ($repositorySlug) use ($app) {
+$app->get('/stats/{repositorySlug}', function ($repositorySlug) use ($app) {
         $stats = $app['stats']->getAllRepositoryStats($repositorySlug);
         return $app['twig']->render('repository_stats.twig', ['stats' => $stats]);
 })->bind('repository_stats');
+$app->get('/chart/{repositorySlug}', function ($repositorySlug) use ($app) {
+        $stats = $app['stats']->getAllRepositoryStats($repositorySlug);
+        return $app['twig']->render('repository_chart.twig', ['stats' => $stats]);
+    })->bind('repository_chart');
 
 
 $app->error(

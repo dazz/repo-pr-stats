@@ -7,9 +7,10 @@
         <form action="{{ url('repository_createDump', {'repositorySlug': repository}) }}" method="post">
             <button value="create">Create new Record</button>
         </form>
+
         <h2 class="sub-header">Repository Stats</h2>
         <div class="row placeholders">
-            {{ render(url('repository_stats', {'repositorySlug': repository})) }}
+            {{ render(url('repository_chart', {'repositorySlug': repository})) }}
         </div>
 
         <h2 class="sub-header">Open Pull Requests: {{ record.displayName }}</h2>
