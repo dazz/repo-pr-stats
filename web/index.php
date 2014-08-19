@@ -48,6 +48,20 @@ $app->get('/repo/{repositorySlug}/stats', function ($repositorySlug) use ($app) 
 })->bind('repository_stats');
 
 
+$app->error(
+    function (\Dazz\PrStats\Service\Exception\NoRecordCreatedException $e, $code) use ($app) {
+
+        return $app['twig']->render(
+            'error.twig',
+            [
+                'contentBlock' => 'noRecord',
+                'message' => $e->getMessage(),
+                'repositorySlug' => $e->getRepositorySlug(),
+            ]
+        );
+    }
+);
+
 $configFile = __DIR__ . '/config.php';
 if (file_exists($configFile) == false) {
     throw new \Exception($configFile . ' does not exist!');
