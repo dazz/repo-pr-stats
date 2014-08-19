@@ -8,13 +8,13 @@
         {% endfor %}
     </tr>
     <tr>
-        <td>countPullRequests</td>
+        <td>number of PRs</td>
         {% for date, stat in stats %}
         <td>{{ stat.countPullRequests }}</td>
         {% endfor %}
     </tr>
     <tr>
-        <td>max. age PR</td>
+        <td>maximum days old</td>
         {% for date, stat in stats %}
             <td>{{ stat.agePullRequests }}</td>
         {% endfor %}

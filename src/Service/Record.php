@@ -52,7 +52,33 @@ class Record
      */
     public function getName()
     {
+        if (empty($this->name)) {
+            return '';
+        }
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        $meta = $this->getMetaFromName($this->getName());
+
+        return sprintf('%s (%sh)', $meta['date'], $meta['hour']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetaFromName()
+    {
+        $name = $this->getName();
+
+        $meta = [];
+        list($meta['filename'], $meta['extension']) = explode('.', $name);
+        list($meta['repository'], $meta['date'], $meta['hour']) = explode('_', $meta['filename']);
+        return $meta;
     }
 
     /**
@@ -115,5 +141,32 @@ class Record
     public function dumpJson()
     {
         return json_encode($this->getPullRequests(), JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfPullRequests()
+    {
+        return count($this->pullRequests);
+    }
+
+    /**
+     * @param int $index
+     * @param string $dateString
+     * @return int
+     */
+    public function getPullRequestAgeSince($index, $dateString = 'now')
+    {
+        $prDetail = $this->getPullRequestDetail($index);
+        if (empty($prDetail)) {
+            return 0;
+        }
+        $createdAt = new \DateTime($prDetail->created_at);
+        $lookingAt = new \DateTime($dateString);
+
+        $days = $createdAt->diff($lookingAt)->format('%a');
+
+        return (int) $days;
     }
 } 
