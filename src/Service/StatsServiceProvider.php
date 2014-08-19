@@ -31,32 +31,25 @@ class StatsServiceProvider implements ServiceProviderInterface
     {
         $app['stats'] = $app->factory(
             function () use ($app) {
-                return new Stats($app['storage'], $app['stats.measureWeights']);
+                return new Stats($app['storage'], $app['stats.measureWeight']);
+            }
+        );
+        $app['stats.measureWeight'] = $app->factory(
+            function () use ($app) {
+                return new StatsWeight($app['stats.measureWeight.config']);
             }
         );
 
-        $app['stats.measureWeights'] = $app->factory(
+        $app['stats.measureWeight.config'] = $app->factory(
             function () {
                 return [
-                    'age' => 10, // @TODO: make it exponential!
-                    'mergeable' => [
-                        'yes' => 0,
-                        'no' => 10
-                    ],
-                    'mergeable_state' => [
-                        'unknown' => 20,
-                        'unstable' => 10, // mergeable, but  fails
-                        'dirty' => 10,    // unmergeable
-                        'clean' => 0,
-                    ],
-                    'assignee' => [
-                        'yes' => 0,
-                        'no' => 10
-                    ],
-                    'body' => [
-                        'yes' => 0,
-                        'no' => 10
-                    ],
+                    'age_3' => 10, // @TODO: make it exponential!
+                    'age_10' => 20,
+                    'age_unlimited' => 100,
+                    'not_mergeable' => 10,
+                    'mergeable_state_not_clean' => 10,
+                    'no_assignee' => 10,
+                    'empty_body' => 10,
                 ];
             }
         );

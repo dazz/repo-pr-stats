@@ -17,13 +17,13 @@ class Stats
 {
     /** @type Storage */
     private $storage;
-    /** @type array */
-    private $measureWeights;
+    /** @type StatsWeight */
+    private $measureWeight;
 
-    public function __construct(Storage $storage, array $measureWeights)
+    public function __construct(Storage $storage, StatsWeight $measureWeight)
     {
         $this->storage = $storage;
-        $this->measureWeights = $measureWeights;
+        $this->measureWeight = $measureWeight;
     }
 
     /**
@@ -75,22 +75,16 @@ class Stats
      */
     public function getPullRequestStats($pullRequest, $dateString = 'now')
     {
-        $weights = [];
+        $score = [
+            'age'             => $this->measureWeight->getAge($pullRequest->data->created_at, $dateString),
+            'mergeable'       => $this->measureWeight->getNotMergeable($pullRequest->data->mergeable),
+            'mergeable_state' => $this->measureWeight->getMergeStateNotClean($pullRequest->data->mergeable_state),
+            'assignee'        => $this->measureWeight->getNoAssignee($pullRequest->assignee->login),
+            'body'            => $this->measureWeight->getEmptyBody($pullRequest->body),
+        ];
 
-        list($date, $time) = explode('T', $pullRequest->data->created_at);
-        $days = (new \DateTime($date))->diff(new \DateTime($dateString))->format('%a');
-        $weights['age'] = $this->measureWeights['age'] * $days;
+        $score['sum'] = array_sum($score);
 
-        $mergeable = $pullRequest->data->mergeable ? 'yes' : 'no';
-        $weights['mergeable'] = $this->measureWeights['mergeable'][$mergeable];
-
-        $weights['mergeable_state'] = $this->measureWeights['mergeable_state'][$pullRequest->data->mergeable_state];
-
-        $weights['assignee'] = empty($pullRequest->assignee->login) ? $this->measureWeights['assignee']['no'] : $this->measureWeights['assignee']['yes'];
-        $weights['body'] = empty($pullRequest->body) ? $this->measureWeights['body']['no'] : $this->measureWeights['body']['yes'];
-
-        $weights['sum'] = array_sum($weights);
-
-        return $weights;
+        return $score;
     }
 } 
