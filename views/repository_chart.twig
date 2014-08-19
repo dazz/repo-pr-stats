@@ -1,0 +1,79 @@
+<script src="/js/Chart.min.js"></script>
+<script>
+    Chart.defaults.global.responsive = true;
+</script>
+<div class="row placeholders row-xs-height col-xs-12">
+    {% block weightChart %}
+    <div class="col-xs-6 placeholder">
+        <canvas id="weightChart"></canvas>
+        <script>
+            var data = {
+                labels: [
+                  {% for date, stat in stats %}"{{ stat.date }} {{ stat.hour }}",{% endfor %}
+                ],
+                datasets: [
+                    {
+                        label: "Weight",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: [
+                            {% for date, stat in stats %}{{ stat.sum }},{% endfor %}
+                        ]
+                    }
+                ]
+            };
+            var options = {};
+            // Get the context of the canvas element we want to select
+            var ctx = document.getElementById("weightChart").getContext("2d");
+            var weightChart = new Chart(ctx).Line(data, options);
+        </script>
+    </div>
+    {% endblock %}
+
+    {% block metaChart %}
+    <div class="col-xs-6 placeholder">
+        <canvas id="metaChart"></canvas>
+        <script>
+            var metaData = {
+                labels: [
+                    {% for date, stat in stats %}"{{ stat.date }} {{ stat.hour }}",{% endfor %}
+                ],
+                datasets: [
+                    {
+                        label: "Number of Pull Requests",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: [
+                            {% for date, stat in stats %}{{ stat.countPullRequests }},{% endfor %}
+                        ]
+                    },
+                    {
+                        label: "Maximun days old",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: [
+                            {% for date, stat in stats %}{{ stat.agePullRequests }},{% endfor %}
+                        ]
+                    }
+                ]
+            };
+            var metaOptions = {};
+            // Get the context of the canvas element we want to select
+            var ctx = document.getElementById("metaChart").getContext("2d");
+            var metaChart = new Chart(ctx).Line(metaData, metaOptions);
+        </script>
+    </div>
+    {% endblock %}
+</div>
