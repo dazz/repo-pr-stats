@@ -45,7 +45,7 @@ Each PR gets penalty points if something is missing.
 Those points are summed up and collected over time for your convenience to see that things are going better and displayed in a chart.
 Nice!
 
-## What does tool measure
+## What does the tool measure
 
 List of stuff that gets penalty points.
 
