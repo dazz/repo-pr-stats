@@ -75,12 +75,13 @@ class Stats
      */
     public function getPullRequestStats($pullRequest, $dateString = 'now')
     {
+        $prDetail = $pullRequest->data;
         $score = [
-            'age'             => $this->measureWeight->getAge($pullRequest->data->created_at, $dateString),
-            'mergeable'       => $this->measureWeight->getNotMergeable($pullRequest->data->mergeable),
-            'mergeable_state' => $this->measureWeight->getMergeStateNotClean($pullRequest->data->mergeable_state),
-            'assignee'        => $this->measureWeight->getNoAssignee($pullRequest->assignee->login),
-            'body'            => $this->measureWeight->getEmptyBody($pullRequest->body),
+            'age'             => $this->measureWeight->getAge($prDetail->created_at, $dateString),
+            'mergeable'       => $this->measureWeight->getNotMergeable($prDetail->mergeable),
+            'mergeable_state' => $this->measureWeight->getMergeStateNotClean($prDetail->mergeable_state),
+            'assignee'        => $this->measureWeight->getNoAssignee($prDetail->assignee),
+            'body'            => $this->measureWeight->getEmptyBody($prDetail->body),
         ];
 
         $score['sum'] = array_sum($score);
