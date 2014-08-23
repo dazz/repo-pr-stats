@@ -65,7 +65,8 @@
                 {% block pulls %}
                     {% for pullRequest in record.pullRequests %}
                         {% set pull = pullRequest.data %}
-                        {% set lastStatus = pullRequest.data_statuses is defined ? pullRequest.data_statuses|first : {'target_url':'', 'state': 'none'} %}
+                        {% set lastStatus = (pullRequest.data_statuses is defined) ? pullRequest.data_statuses|first : {'target_url':'', 'state': 'none'} %}
+                        {% set targetUrl = lastStatus.target_url is defined ? lastStatus.target_url : '' %}
                         {% set stats = pullRequest.data_stats %}
                         <tr>
                             <td>{{ pullRequest.data_stats is defined ? pullRequest.data_stats.sum : 0}}</td>
@@ -92,7 +93,7 @@
                             <td
                                     class="{{ stats.mergeable_state > 0 ? 'danger' : 'success' }}"
                                     title="{{ stats.mergeable_state > 0 ? 'Tests fail' : 'Integratable' }}">
-                                <a href="{{ lastStatus.target_url }}" title="State of integration">{{ pull.mergeable_state }}</a>
+                                <a href="{{ targetUrl }}" title="State of integration">{{ pull.mergeable_state }}</a>
                             </td>
                             <td>{{ pull.user.login[:15] }}</td>
                             <td
