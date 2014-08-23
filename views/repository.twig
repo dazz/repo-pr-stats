@@ -22,6 +22,10 @@
                     <th>Weight</th>
                     <th>Number of open PRs</th>
                     <th>Oldest PR</th>
+                    <th>Commits</th>
+                    <th>Changed files</th>
+                    <th>Additions</th>
+                    <th>Deletions</th>
                 </tr>
                 </thead>
                 <tr>
@@ -29,6 +33,10 @@
                     <td>{{ recordStats.sum }}</td>
                     <td>{{ recordStats.countPullRequests }}</td>
                     <td>{{ recordStats.agePullRequests }} days</td>
+                    <td>{{ recordStats.commits }}</td>
+                    <td>{{ recordStats.changedFiles }}</td>
+                    <td>{{ recordStats.additions }}</td>
+                    <td>{{ recordStats.deletions }}</td>
                 </tr>
             </table>
         </div>

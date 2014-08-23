@@ -49,10 +49,18 @@ class Stats
         /** @var \SplFileInfo $file */
         $stat = $record->getMetaFromName();
 
-        $stat['countPullRequests'] = $record->getNumberOfPullRequests();
-        $stat['agePullRequests'] = 0;
-        $stat['sum'] = 0;
-        $stat['weights'] = [];
+        $stat = array_merge(
+            $stat,
+            [
+                'countPullRequests' => $record->getNumberOfPullRequests(),
+                'agePullRequests' => 0,
+                'sum' => 0,
+                'commits' => 0,
+                'changedFiles' => 0,
+                'additions' => 0,
+                'deletions' => 0,
+            ]
+        );
 
         foreach ($record->getPullRequests() as $index => $pullRequest) {
 
@@ -63,6 +71,10 @@ class Stats
 
             $record->addPullRequestStats($index, $this->getPullRequestStats($pullRequest, $stat['date']));
             $stat['sum'] += $record->getPullRequestStats($index)['sum'];
+            $stat['commits'] += $pullRequest->data->commits;
+            $stat['changedFiles'] += $pullRequest->data->changed_files;
+            $stat['additions'] += $pullRequest->data->additions;
+            $stat['deletions'] += $pullRequest->data->deletions;
         }
         return $stat;
     }
