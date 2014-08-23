@@ -22,6 +22,10 @@
                     <th>Weight</th>
                     <th>Number of open PRs</th>
                     <th>Oldest PR</th>
+                    <th>Commits</th>
+                    <th>Changed files</th>
+                    <th>Additions</th>
+                    <th>Deletions</th>
                 </tr>
                 </thead>
                 <tr>
@@ -29,13 +33,17 @@
                     <td>{{ recordStats.sum }}</td>
                     <td>{{ recordStats.countPullRequests }}</td>
                     <td>{{ recordStats.agePullRequests }} days</td>
+                    <td>{{ recordStats.commits }}</td>
+                    <td>{{ recordStats.changedFiles }}</td>
+                    <td>{{ recordStats.additions }}</td>
+                    <td>{{ recordStats.deletions }}</td>
                 </tr>
             </table>
         </div>
 
         <h2 class="sub-header">Open Pull Requests</h2>
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-condensed">
                 <thead>
                 <tr>
                     <th>Weight</th>
@@ -48,13 +56,16 @@
                     <th>CI State</th>
                     <th>Created By</th>
                     <th>Assigned To</th>
+                    <th># Commits</th>
+                    <th># Files</th>
+                    <th class="text-center">++ / --</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% block pulls %}
                     {% for pullRequest in record.pullRequests %}
                         {% set pull = pullRequest.data %}
-                        {% set lastStatus = pullRequest.data_statuses_last is defined ? pullRequest.data_statuses_last : {'target_url':''} %}
+                        {% set lastStatus = pullRequest.data_statuses is defined ? pullRequest.data_statuses|first : {'target_url':'', 'state': 'none'} %}
                         {% set stats = pullRequest.data_stats %}
                         <tr>
                             <td>{{ pullRequest.data_stats is defined ? pullRequest.data_stats.sum : 0}}</td>
@@ -83,11 +94,21 @@
                                     title="{{ stats.mergeable_state > 0 ? 'Tests fail' : 'Integratable' }}">
                                 <a href="{{ lastStatus.target_url }}" title="State of integration">{{ pull.mergeable_state }}</a>
                             </td>
-                            <td>{{ pull.user.login }}</td>
+                            <td>{{ pull.user.login[:15] }}</td>
                             <td
                                     class="{{ stats.assignee > 0 ? 'danger' : 'success' }}"
                                     title="{{ stats.assignee > 0 ? 'PR is not assigned to someone, please assign.' : 'Someone cares' }}">
-                                {{ pull.assignee ? pull.assignee.login : '' }}
+                                {{ pull.assignee ? pull.assignee.login[:15] : '' }}
+                            </td>
+                            <td class="text-center">
+                                {{ "%02d"|format(pull.commits) }}
+                            </td>
+                            <td class="text-center">
+                                {{ "%02d"|format(pull.changed_files) }}
+                            </td>
+                            <td class="text-center">
+                                <span class="label label-success">{{ "%02d"|format(pull.additions) }}</span>
+                                <span class="label label-danger">{{ "%02d"|format(pull.deletions) }}</span>
                             </td>
                         </tr>
                     {% endfor %}
