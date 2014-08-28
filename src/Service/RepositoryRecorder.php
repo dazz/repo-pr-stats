@@ -54,7 +54,7 @@ class RepositoryRecorder
         foreach ($record->getPullRequests() as $index => $pr) {
 
             $record->addPullRequestDetail($index, $this->hoster->get($pr->url));
-            $record->addPullRequestStatus($index, $record->getPullRequestDetail($index)->statuses_url);
+            $record->addPullRequestStatus($index, $this->hoster->get($record->getPullRequestDetail($index)->statuses_url));
         }
         $this->storage->storeRecord($repositorySlug, $record);
     }

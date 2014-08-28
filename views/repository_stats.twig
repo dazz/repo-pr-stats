@@ -25,4 +25,28 @@
             <td>{{ stat.sum }}</td>
         {% endfor %}
     </tr>
+    <tr>
+        <td>commits</td>
+        {% for date, stat in stats %}
+            <td>{{ stat.commits }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>changed files</td>
+        {% for date, stat in stats %}
+            <td>{{ stat.changedFiles }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>additions</td>
+        {% for date, stat in stats %}
+            <td>{{ stat.additions }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>deletions</td>
+        {% for date, stat in stats %}
+            <td>{{ stat.deletions }}</td>
+        {% endfor %}
+    </tr>
 </table>

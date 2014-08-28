@@ -4,6 +4,8 @@ This small tool shows a small statistic over configured repositories.
 When the url http://localhost:8002/repo/{repository} gets opened the github will be queried to get data about all open PRs.
 The data will be stored in the configured `prLog/{repository}` directory and displayed in the stats.
 
+#### [Why, How and What: Read here!](https://github.com/dazz/repo-pr-stats/blob/master/doc/why-what-how.md)
+
 ### Run
 
 * clone me
@@ -18,4 +20,4 @@ The data will be stored in the configured `prLog/{repository}` directory and dis
 
 ### Screenshot
 
-![first screenshot](https://cloud.githubusercontent.com/assets/182954/3973471/3d1b5048-27e8-11e4-8aba-d83044737073.png)
+![first screenshot](https://cloud.githubusercontent.com/assets/182954/4017368/576fd744-2a3f-11e4-9200-29745af1bf13.png)

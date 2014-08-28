@@ -71,12 +71,12 @@ class StatsWeight
     }
 
     /**
-     * @param string $assignee
+     * @param \stdClass $assignee
      * @return int
      */
     public function getNoAssignee($assignee)
     {
-        if (empty($assignee)) {
+        if ($this->isAssigneeEmpty($assignee)) {
             return $this->config['no_assignee'];
         }
         return 0;
@@ -92,5 +92,20 @@ class StatsWeight
             return $this->config['empty_body'];
         }
         return 0;
+    }
+
+    /**
+     * @param $assignee
+     * @return bool
+     */
+    private function isAssigneeEmpty($assignee)
+    {
+        if (empty($assignee)) {
+            return true;
+        }
+        if (property_exists($assignee, 'login') == false) {
+            return true;
+        }
+        return  empty($assignee->login);
     }
 } 
