@@ -16,7 +16,7 @@ namespace Dazz\PrStats\Service\Storage\Adapter;
 interface StorageAdapterInterface
 {
     /**
-     * @param $repositorySlug
+     * @param string $repositorySlug
      * @return string
      */
     public function getRepositoryDirectory($repositorySlug);

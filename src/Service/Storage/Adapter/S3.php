@@ -12,8 +12,8 @@ namespace Dazz\PrStats\Service\Storage\Adapter;
 use Aws\S3\S3Client;
 
 /**
- * Class S3System
- * @package Dazz\PrStats\Service\Storage
+ * Class S3
+ * @package Dazz\PrStats\Service\Storage\Adapter
  */
 class S3 implements StorageAdapterInterface
 {
@@ -31,7 +31,7 @@ class S3 implements StorageAdapterInterface
     }
 
     /**
-     * @param $repositorySlug
+     * @param string $repositorySlug
      * @return string
      */
     public function getRepositoryDirectory($repositorySlug)

@@ -26,7 +26,7 @@ class StorageServiceProvider implements ServiceProviderInterface
     {
         $pimple['storage.config'] = function () use ($pimple) {
             return [
-                'storage.system' => 's3', // file | s3
+                'storage.system' => 'file', // file | s3
                 'file.cacheDir' => sprintf('%s/prLog', $pimple['rootDir']),
                 's3.client' => [
                     'key'    => 'your-aws-access-key-id',
