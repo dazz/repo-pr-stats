@@ -67,7 +67,7 @@ class Storage implements StorageInterface
             ->in($directory)
             ->name('*.json')
             ->sortByName()
-            ;
+        ;
     }
 
     /**
