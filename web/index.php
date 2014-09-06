@@ -10,7 +10,7 @@ $app->register(new \Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => $app['rootDir'].'/views',
 ));
 $app->register(new \Dazz\PrStats\Service\RepositoryServiceProvider);
-$app->register(new \Dazz\PrStats\Service\StorageServiceProvider);
+$app->register(new \Dazz\PrStats\Service\Storage\StorageServiceProvider());
 $app->register(new \Dazz\PrStats\Service\StatsServiceProvider);
 
 $app->get('/', function () use ($app) {

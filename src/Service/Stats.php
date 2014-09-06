@@ -7,7 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- namespace Dazz\PrStats\Service;
+namespace Dazz\PrStats\Service;
+
+use Dazz\PrStats\Service\Storage\StorageInterface;
 
 /**
  * Class Stats
@@ -15,12 +17,16 @@
  */
 class Stats
 {
-    /** @type Storage */
+    /** @type StorageInterface */
     private $storage;
     /** @type StatsWeight */
     private $measureWeight;
 
-    public function __construct(Storage $storage, StatsWeight $measureWeight)
+    /**
+     * @param StorageInterface $storage
+     * @param StatsWeight      $measureWeight
+     */
+    public function __construct(StorageInterface $storage, StatsWeight $measureWeight)
     {
         $this->storage = $storage;
         $this->measureWeight = $measureWeight;

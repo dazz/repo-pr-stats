@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the RepoPrStats application.
  *
  * (c) Anne-Julia Scheuermann
@@ -7,23 +7,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Dazz\PrStats\Service;
+namespace Dazz\PrStats\Service\Storage;
 
 use Dazz\PrStats\Service\Exception\NoRecordCreatedException;
+use Dazz\PrStats\Service\Record;
+use Dazz\PrStats\Service\Storage\Adapter\StorageAdapterInterface;
 use Symfony\Component\Finder\Finder;
 
 /**
  * Class Storage
- * @package Dazz\PrStats\Service
+ * @package Dazz\PrStats\Service\Storage
  */
-class Storage
+class Storage implements StorageInterface
 {
-    /** @var  string */
-    private $path;
+    /**
+     * @type Adapter\StorageAdapterInterface
+     */
+    private $adapter;
 
-    public function __construct($path)
+    public function __construct(StorageAdapterInterface $adapter)
     {
-        $this->path = $path;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -36,7 +40,7 @@ class Storage
     {
         $files = Finder::create()
             ->files()
-            ->in($this->getRepositoryDirectory($repositorySlug))
+            ->in($this->adapter->getRepositoryDirectory($repositorySlug))
             ->name(sprintf('*%s*.json', $filename))
         ;
 
@@ -48,14 +52,16 @@ class Storage
     /**
      * @param string $repositorySlug
      * @return Finder
+     *
+     * @throws NoRecordCreatedException
      */
     public function getAllRecords($repositorySlug)
     {
-        $directory = $this->getRepositoryDirectory($repositorySlug);
+        $directory = $this->adapter->getRepositoryDirectory($repositorySlug);
         if (!is_dir($directory)) {
             throw new NoRecordCreatedException($repositorySlug);
         }
-        
+
         return Finder::create()
             ->files()
             ->in($directory)
@@ -100,22 +106,12 @@ class Storage
     private function createFileName($repositorySlug, $time = 'now', $timeFormat = 'Y-m-d_H')
     {
         $format = (new \DateTime($time))->format($timeFormat);
-        $folderName = sprintf('%s/%s', $this->path, $repositorySlug);
+        $folderName = $this->adapter->getRepositoryDirectory($repositorySlug);
 
         if (is_dir($folderName) == false) {
             mkdir($folderName, 0777, true);
         }
 
         return sprintf('%s/%s_%s.json', $folderName, $repositorySlug, $format);
-    }
-
-    /**
-     * @param $repositorySlug
-     * @return string
-     */
-    private function getRepositoryDirectory($repositorySlug)
-    {
-        $repoDir = sprintf('%s/%s', $this->path, $repositorySlug);
-        return $repoDir;
     }
 } 

@@ -9,13 +9,15 @@
  */
 namespace Dazz\PrStats\Service;
 
+use Dazz\PrStats\Service\Storage\StorageInterface;
+
 /**
  * Class RepositoryRecorder
  * @package Dazz\PrStats\Service
  */
 class RepositoryRecorder
 {
-    /** @type Storage */
+    /** @type StorageInterface */
     private $storage;
     /** @type RepositoryHost */
     private $hoster;
@@ -24,7 +26,13 @@ class RepositoryRecorder
     /** @type null|string */
     private $repositoryStartUrlPattern;
 
-    public function __construct(RepositoryHost $hoster, Storage $storage, array $repositories, $repositoryStartUrlPattern = null)
+    /**
+     * @param RepositoryHost   $hoster
+     * @param StorageInterface $storage
+     * @param array            $repositories
+     * @param null             $repositoryStartUrlPattern
+     */
+    public function __construct(RepositoryHost $hoster, StorageInterface $storage, array $repositories, $repositoryStartUrlPattern = null)
     {
         $this->hoster = $hoster;
         $this->storage = $storage;
