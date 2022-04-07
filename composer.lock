@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "0f6f9ad00704bfcfc79ddd37bf89b7cc",
+    "content-hash": "d553201fe76ad2e7195e6b73dfab13bf",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -72,7 +72,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2014-08-14 20:49:47"
+            "time": "2014-08-14T20:49:47+00:00"
         },
         {
             "name": "guzzle/guzzle",
@@ -164,20 +164,20 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-08-11 04:32:36"
+            "time": "2014-08-11T04:32:36+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "4.2.0",
+            "version": "4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "cc79aa76054e3e5e45dfd87f7b0f61f54b3a759d"
+                "reference": "13a8e5acff26b0a87d353042170b48976da004a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/cc79aa76054e3e5e45dfd87f7b0f61f54b3a759d",
-                "reference": "cc79aa76054e3e5e45dfd87f7b0f61f54b3a759d",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/13a8e5acff26b0a87d353042170b48976da004a1",
+                "reference": "13a8e5acff26b0a87d353042170b48976da004a1",
                 "shasum": ""
             },
             "require": {
@@ -200,12 +200,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
                 "files": [
                     "src/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -229,7 +229,11 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-08-18 00:48:35"
+            "support": {
+                "issues": "https://github.com/guzzle/guzzle/issues",
+                "source": "https://github.com/guzzle/guzzle/tree/4.x"
+            },
+            "time": "2016-07-15T17:44:18+00:00"
         },
         {
             "name": "guzzlehttp/streams",
@@ -282,7 +286,12 @@
                 "Guzzle",
                 "stream"
             ],
-            "time": "2014-08-17 21:15:53"
+            "support": {
+                "issues": "https://github.com/guzzle/streams/issues",
+                "source": "https://github.com/guzzle/streams/tree/master"
+            },
+            "abandoned": true,
+            "time": "2014-08-17T21:15:53+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -328,7 +337,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2014-07-24 09:48:15"
+            "time": "2014-07-24T09:48:15+00:00"
         },
         {
             "name": "psr/log",
@@ -366,7 +375,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2012-12-21T11:40:51+00:00"
         },
         {
             "name": "silex/silex",
@@ -453,7 +462,7 @@
             "keywords": [
                 "microframework"
             ],
-            "time": "2014-07-24 09:56:44"
+            "time": "2014-07-24T09:56:44+00:00"
         },
         {
             "name": "symfony/debug",
@@ -508,7 +517,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "http://symfony.com",
-            "time": "2014-07-09 09:05:48"
+            "time": "2014-07-09T09:05:48+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -565,7 +574,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2014-07-28 13:20:46"
+            "time": "2014-07-28T13:20:46+00:00"
         },
         {
             "name": "symfony/finder",
@@ -612,7 +621,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2014-07-28 13:20:46"
+            "time": "2014-07-28T13:20:46+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -665,7 +674,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-08-05 09:00:40"
+            "time": "2014-08-05T09:00:40+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -736,7 +745,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "http://symfony.com",
-            "time": "2014-08-06 07:03:01"
+            "time": "2014-08-06T07:03:01+00:00"
         },
         {
             "name": "symfony/routing",
@@ -802,7 +811,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2014-07-28 13:20:46"
+            "time": "2014-07-28T13:20:46+00:00"
         },
         {
             "name": "symfony/security-core",
@@ -864,7 +873,7 @@
             ],
             "description": "Symfony Security Component - Core Library",
             "homepage": "http://symfony.com",
-            "time": "2014-08-05 09:00:40"
+            "time": "2014-08-05T09:00:40+00:00"
         },
         {
             "name": "symfony/security-csrf",
@@ -918,7 +927,7 @@
             ],
             "description": "Symfony Security Component - CSRF Library",
             "homepage": "http://symfony.com",
-            "time": "2014-05-12 09:28:39"
+            "time": "2014-05-12T09:28:39+00:00"
         },
         {
             "name": "symfony/twig-bridge",
@@ -990,7 +999,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2014-08-06 06:44:37"
+            "time": "2014-08-06T06:44:37+00:00"
         },
         {
             "name": "twig/twig",
@@ -1047,24 +1056,21 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-07-05 12:19:05"
+            "time": "2014-07-05T12:19:05+00:00"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silex/silex": 20
+        "silex/silex": 20,
+        "symfony/twig-bridge": 20,
+        "twig/twig": 20,
+        "symfony/finder": 20
     },
     "prefer-stable": false,
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }
